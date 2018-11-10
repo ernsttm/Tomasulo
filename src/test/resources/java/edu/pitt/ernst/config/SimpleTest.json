@@ -1,0 +1,40 @@
+{
+  "rob_entries": 10,
+  "cdb_entries": 1,
+  "hardware_fp_registers": 60,
+  "hardware_int_registers": 60,
+  "instruction_file": "D:/School Work/Fall 2018/CA1/project/src/test/resources/java/edu/pitt/ernst/instructions/1A.txt",
+  "memory": {
+    "start_values": [
+      { "address": 0, "value": "10.1" },
+      { "address": 4, "value": "9" },
+      { "address": 12, "value": "-234.556" }
+    ]
+  },
+  "registers": {
+    "start_values": [
+      { "name": "int_1", "value": "1" },
+      { "name": "int_3", "value": "-1" },
+      { "name": "int_4", "value": "-1" },
+      { "name": "int_6", "value": "1" },
+      { "name": "int_5", "value": "2" },
+      { "name": "fp_0", "value": "1.0" },
+      { "name": "fp_1", "value": "2.0" },
+      { "name": "fp_4", "value": "1.0" },
+      { "name": "fp_3", "value": "2.0" },
+      { "name": "fp_6", "value": "-10.0" },
+      { "name": "fp_7", "value": ".5" }
+    ]
+  },
+  "reservation_stations" : {
+    "adder_stations": 2,
+    "fp_adder_stations": 3,
+    "fp_multiplier_stations": 2,
+    "memory_stations": 3,
+    "adder_cycles": 1,
+    "fp_adder_cycles": 3,
+    "fp_multiplier_cycles": 20,
+    "memory_exec_cycles": 1,
+    "memory_access_cycles": 4
+  }
+}

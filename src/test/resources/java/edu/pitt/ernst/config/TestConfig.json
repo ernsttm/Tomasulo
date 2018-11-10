@@ -1,0 +1,33 @@
+{
+  "rob_entries": 10,
+  "cdb_entries": 1,
+  "hardware_fp_registers": 60,
+  "hardware_int_registers": 60,
+  "instruction_file": "/opt/test_instructions.txt",
+  "memory": {
+    "start_values": [
+      { "address": 0, "value": "10.1" },
+      { "address": 4, "value": "9" },
+      { "address": 12, "value": "-234.556" }
+    ]
+  },
+  "registers": {
+    "start_values": [
+      { "name": "int_1", "value": "10" },
+      { "name": "fp_30", "value": "-54.1234" },
+      { "name": "int_10", "value": "-25" },
+      { "name": "fp_15", "value": ".000012345" }
+    ]
+  },
+  "reservation_stations" : {
+    "adder_stations": 2,
+    "fp_adder_stations": 3,
+    "fp_multiplier_stations": 2,
+    "memory_stations": 3,
+    "adder_cycles": 1,
+    "fp_adder_cycles": 3,
+    "fp_multiplier_cycles": 20,
+    "memory_exec_cycles": 1,
+    "memory_access_cycles": 4
+  }
+}
