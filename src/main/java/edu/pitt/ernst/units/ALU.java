@@ -1,6 +1,8 @@
 package edu.pitt.ernst.units;
 
+import edu.pitt.ernst.BTB;
 import edu.pitt.ernst.CDB;
+import edu.pitt.ernst.Processor;
 
 import java.util.ArrayList;
 
@@ -8,9 +10,10 @@ import java.util.ArrayList;
  * This class represents an integer arithmetic processing unit.
  */
 public class ALU extends FunctionalUnit {
-  public ALU(int reservationStations, int adderExecCycles) {
+  public ALU(int reservationStations, int adderExecCycles, Processor processor) {
     super();
 
+    processor_ = processor;
     stations_ = new ArrayList<>();
     for (int i = 0; i < reservationStations; i++) {
       stations_.add(new ALUReservationStation());
@@ -25,6 +28,7 @@ public class ALU extends FunctionalUnit {
   public void execute() {
     // If an operation has completed attempt to publish it and reset the Functional Unit state.
     if (execCycles_ >= executeCyclesRequired_) {
+      performOperation(stationToExecute_);
       if (tryPublish(stationToExecute_)) {
         stationToExecute_.reset();
         execCycles_ = 0;
@@ -50,11 +54,18 @@ public class ALU extends FunctionalUnit {
       if (null != stationToExecute_) {
         execCycles_++;
         stationToExecute_.start();
-        performOperation(stationToExecute_);
       }
     } else {
       execCycles_++;
     }
+  }
+
+  @Override
+  public void branchRollback(int id) {
+    super.branchRollback(id);
+
+    execCycles_ = 0;
+    stationToExecute_ = null;
   }
 
   @Override
@@ -65,8 +76,9 @@ public class ALU extends FunctionalUnit {
 
   @Override
   protected void performOperation(ReservationStation station) {
+    BTB btb = BTB.getInstance();
     ALUReservationStation aluRS = (ALUReservationStation) station;
-    switch (aluRS.getInstructionType()) {
+    switch (station.getInstructionType()) {
       case ADD_INT:
         value_ = aluRS.getOp1() + aluRS.getOp2();
         break;
@@ -76,10 +88,27 @@ public class ALU extends FunctionalUnit {
       case ADD_IMMEDIATE:
         value_ = aluRS.getOp1() + aluRS.getOp2();
         break;
+      case BRANCH_EQUAL: {
+        boolean result = aluRS.getOp1() == aluRS.getOp2();
+        if (result != btb.setPrediction(station.getInstructionId(), result)) {
+          processor_.triggerBranchMisprediction(station.getInstruction(), result);
+        }
+        value_ = result ? 1 : 0;
+        break;
+      }
+      case BRANCH_NOT_EQUAL: {
+        boolean result = aluRS.getOp1() != aluRS.getOp2();
+        if (result != BTB.getInstance().setPrediction(station.getInstructionId(), result)) {
+          processor_.triggerBranchMisprediction(station.getInstruction(), result);
+        }
+        value_ = result ? 1 : 0;
+        break;
+      }
     }
   }
 
   private int value_;
   private int execCycles_;
+  private Processor processor_;
   private ReservationStation stationToExecute_;
 }

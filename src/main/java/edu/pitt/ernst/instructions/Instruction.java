@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Instruction {
-  public Instruction() {
+  public Instruction(int address) {
+    address_ = address;
+
     id_ = InstructionBuffer.countInstruction();
     transitions_ = new HashMap<>();
   }
@@ -15,6 +17,10 @@ public abstract class Instruction {
 
   public int getId() {
     return id_;
+  }
+
+  public int getAddress() {
+    return address_;
   }
 
   public void changeState(InstructionState state, int cycle) {
@@ -37,5 +43,6 @@ public abstract class Instruction {
   }
 
   private int id_;
+  private int address_;
   private Map<InstructionState, Integer> transitions_;
 }

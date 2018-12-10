@@ -58,6 +58,14 @@ public class MemoryUnit extends FunctionalUnit {
     }
   }
 
+  @Override
+  public void branchRollback(int id) {
+    super.branchRollback(id);
+
+    execCycles_ = 0;
+    executionStation_ = null;
+  }
+
   public void memory() {
     if (memCycles_ >= memAccessCycles_) {
       performOperation(memoryStation_);

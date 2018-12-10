@@ -32,6 +32,14 @@ public abstract class FunctionalUnit implements CDBListener {
     return null;
   }
 
+  public void branchRollback(int id) {
+    for (ReservationStation station : stations_) {
+      if (station.isBusy() && id < station.getInstructionId()) {
+        station.reset();
+      }
+    }
+  }
+
   public void execute() {
     // First choose the earliest instruction ready and attempt to publish it
     ReservationStation stationToRemove = null;

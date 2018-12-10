@@ -24,10 +24,9 @@ public class FloatingPointALURS extends ReservationStation {
     super.reserve(instruction, rat);
 
     ALUInstruction aluInstruction = (ALUInstruction)instruction;
-    destination_ = rat.reserve(aluInstruction.getDestination(), true);
-
     getValue(aluInstruction.getOp1(), 0, rat);
     getValue(aluInstruction.getOp2(), 1, rat);
+    destination_ = rat.reserve(aluInstruction.getDestination(), true);
   }
 
   @Override
@@ -73,10 +72,14 @@ public class FloatingPointALURS extends ReservationStation {
   }
 
   private void getValue(int fileRegister, int index, RegisterAliasingTable rat) {
-    regIds_[index] = rat.getRegister(fileRegister, true);
-
-    // If there is no mapping, then the register contains the acceptable value.
-    if (null == regIds_[index]) {
+    if (rat.isReservedRegister(fileRegister, true)) {
+      if (rat.isValidRegister(fileRegister, true)) {
+        values_[index] = rat.getFloatRegisterValue(fileRegister);
+      } else {
+        regIds_[index] = rat.getHardwareRegister(fileRegister, true);
+      }
+    } else {
+      // If there is no mapping, then the register contains the acceptable value.
       values_[index] = RegisterFile.getInstance().getDoubleRegister(fileRegister).getValue();
     }
   }

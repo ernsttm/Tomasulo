@@ -1,6 +1,7 @@
 package edu.pitt.ernst;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * This class mimics the functionality of the Central Data Bus inside a processor.  Only one result will be allowed to
@@ -44,16 +45,18 @@ public class CDB {
     return false;
   }
 
-  public void writeBack() {
+  public void writeBack(RegisterAliasingTable rat) {
     if (inUse_) {
       if (null != intValue_) {
         for (CDBListener listener : listeners) {
           listener.listenForInt(instructionId_, register_, intValue_);
         }
+        rat.setIntRegister(register_, intValue_);
       } else if (null != doubleValue_) {
         for (CDBListener listener : listeners) {
           listener.listenForDouble(instructionId_, register_, doubleValue_);
         }
+        rat.setFpRegister(register_, doubleValue_);
       } else {
         for (CDBListener listener : listeners) {
           listener.listenForInt(instructionId_, -1, -1);

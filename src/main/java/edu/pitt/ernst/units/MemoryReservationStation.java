@@ -27,18 +27,31 @@ public class MemoryReservationStation extends ReservationStation {
 
     // Acquire assets shared between load and store instructions.
     offset_ = memInstruction.getOffset();
-    registerId_ = rat.getRegister(memInstruction.getRegister(), false);
-    if (null == registerId_) {
-      registerValue_ = RegisterFile.getInstance().getIntRegister(memInstruction.getRegister()).getValue();
+    int register = memInstruction.getRegister();
+    if (rat.isReservedRegister(register, false)) {
+      if (rat.isValidRegister(register, false)) {
+        registerValue_ = rat.getIntRegisterValue(register);
+      } else {
+        registerId_ = rat.getHardwareRegister(register, false);
+      }
+    } else {
+      // If there is no mapping, then the register contains the acceptable value.
+      registerValue_ = RegisterFile.getInstance().getIntRegister(register).getValue();
     }
 
     if (InstructionTypes.LOAD_FP == memInstruction.getInstructionType()) {
       destination_ = rat.reserve(memInstruction.getDestination(), true);
     } else {
-      storeId_ = rat.getRegister(memInstruction.getDestination(), true);
-
-      if (null == storeId_) {
-        storeValue_ = RegisterFile.getInstance().getDoubleRegister(memInstruction.getDestination()).getValue();
+      int memRegister = memInstruction.getDestination();
+      if (rat.isReservedRegister(memRegister, true)) {
+        if (rat.isValidRegister(memRegister, true)) {
+          storeValue_ = rat.getFloatRegisterValue(memRegister);
+        } else {
+          storeId_ = rat.getHardwareRegister(memRegister, true);
+        }
+      } else {
+        // If there is no mapping, then the register contains the acceptable value.
+        storeValue_ = RegisterFile.getInstance().getDoubleRegister(memRegister).getValue();
       }
     }
 

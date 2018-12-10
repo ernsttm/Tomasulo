@@ -30,6 +30,10 @@ public abstract class ReservationStation {
     return instruction_.getId();
   }
 
+  Instruction getInstruction() {
+    return instruction_;
+  }
+
   InstructionTypes getInstructionType() {
     return instruction_.getInstructionType();
   }

@@ -2,6 +2,7 @@ package edu.pitt.ernst.units;
 
 import edu.pitt.ernst.RegisterAliasingTable;
 import edu.pitt.ernst.instructions.ALUInstruction;
+import edu.pitt.ernst.instructions.BranchInstruction;
 import edu.pitt.ernst.instructions.Instruction;
 import edu.pitt.ernst.instructions.InstructionTypes;
 import edu.pitt.ernst.registers.RegisterFile;
@@ -21,17 +22,22 @@ public class ALUReservationStation extends ReservationStation {
   public void reserve(Instruction instruction, RegisterAliasingTable rat) {
     super.reserve(instruction, rat);
 
-    ALUInstruction aluInstruction = (ALUInstruction)instruction;
-    destination_ = rat.reserve(aluInstruction.getDestination(), false);
-
-    getValue(aluInstruction.getOp1(), 0, rat);
-    if (InstructionTypes.ADD_IMMEDIATE == aluInstruction.getInstructionType()) {
-      values_[1] = aluInstruction.getOp2();
+    if (InstructionTypes.BRANCH_NOT_EQUAL == instruction.getInstructionType() ||
+        InstructionTypes.BRANCH_EQUAL == instruction.getInstructionType()) {
+      BranchInstruction branchInstruction = (BranchInstruction)instruction;
+      getValue(branchInstruction.getOp1(), 0, rat);
+      getValue(branchInstruction.getOp2(), 1, rat);
     } else {
-      getValue(aluInstruction.getOp2(), 1, rat);
+      ALUInstruction aluInstruction = (ALUInstruction) instruction;
+      getValue(aluInstruction.getOp1(), 0, rat);
+      if (InstructionTypes.ADD_IMMEDIATE == aluInstruction.getInstructionType()) {
+        values_[1] = aluInstruction.getOp2();
+      } else {
+        getValue(aluInstruction.getOp2(), 1, rat);
+      }
+
+      destination_ = rat.reserve(aluInstruction.getDestination(), false);
     }
-
-
   }
 
   @Override
@@ -43,6 +49,8 @@ public class ALUReservationStation extends ReservationStation {
 
     values_[0] = null;
     values_[1] = null;
+
+    destination_ = -1;
   }
 
   public int getOp1() {
@@ -78,10 +86,14 @@ public class ALUReservationStation extends ReservationStation {
   }
 
   private void getValue(int fileRegister, int index, RegisterAliasingTable rat) {
-    regIds_[index] = rat.getRegister(fileRegister, false);
-
-    // If there is no mapping, then the register contains the acceptable value.
-    if (null == regIds_[index]) {
+    if (rat.isReservedRegister(fileRegister, false)) {
+      if (rat.isValidRegister(fileRegister, false)) {
+        values_[index] = rat.getIntRegisterValue(fileRegister);
+      } else {
+        regIds_[index] = rat.getHardwareRegister(fileRegister, false);
+      }
+    } else {
+      // If there is no mapping, then the register contains the acceptable value.
       values_[index] = RegisterFile.getInstance().getIntRegister(fileRegister).getValue();
     }
   }

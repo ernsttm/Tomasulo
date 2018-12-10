@@ -6,6 +6,7 @@ public class BufferEntry {
   public BufferEntry(Instruction instruction) {
     readyToCommit_ = false;
 
+    destination_ = -1;
     instruction_ = instruction;
   }
 
@@ -21,12 +22,18 @@ public class BufferEntry {
     return readyToCommit_;
   }
 
-  public void setValue(int value) {
+  public void setValue(int destination, int value) {
+    destination_ = destination;
     intValue_ = value;
   }
 
-  public void setValue(double value) {
+  public void setValue(int destination, double value) {
+    destination_ = destination;
     floatValue_ = value;
+  }
+
+  public int getDestination() {
+    return destination_;
   }
 
   public int getIntValue() {
@@ -38,7 +45,9 @@ public class BufferEntry {
   }
 
   private int intValue_;
+  private int destination_;
   private double floatValue_;
   private boolean readyToCommit_;
+
   private Instruction instruction_;
 }
