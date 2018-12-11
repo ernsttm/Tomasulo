@@ -189,7 +189,7 @@ public class Processor {
     }
 
     Processor processor = new Processor(config);
-    processor.executeCycle();
+    processor.executeProgram();
   }
 
   public static int getCycle() {
