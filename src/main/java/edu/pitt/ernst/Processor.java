@@ -14,9 +14,14 @@ import edu.pitt.ernst.units.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
 
 public class Processor {
   public Processor(ProcessorConfig config) {
@@ -50,10 +55,6 @@ public class Processor {
   }
 
   public boolean executeCycle() {
-    if (!instructionBuffer_.hasNext() && rob_.complete()) {
-      return true;
-    }
-
     if (stopCycle_ == cycle_) {
       handleInput();
     }
@@ -88,7 +89,7 @@ public class Processor {
     }
     cycle_++;
 
-    return !instructionBuffer_.hasNext() && rob_.complete();
+    return instructionBuffer_.hasNext() || !rob_.complete();
   }
 
   public void triggerBranchMisprediction(Instruction instruction, boolean taken) {
@@ -103,7 +104,7 @@ public class Processor {
 
     if (null != outputFile_) {
       try {
-        Files.write(Paths.get(outputFile_), outputString.toString().getBytes());
+        Files.write(Paths.get(outputFile_), outputString.toString().getBytes(), CREATE, APPEND);
       } catch (IOException ie) {
         System.out.println("Failed to write output file.");
       }
@@ -189,7 +190,20 @@ public class Processor {
     }
 
     Processor processor = new Processor(config);
-    processor.executeProgram();
+
+    System.out.println(args.length);
+    if (args.length > 2) {
+      Scanner scanner = new Scanner(System.in);
+      System.out.println("In cycle");
+      while (processor.executeCycle()) {
+        processor.outputState();
+        scanner.nextLine();
+      }
+
+      processor.outputState();
+    } else {
+      processor.executeProgram();
+    }
   }
 
   public static int getCycle() {
