@@ -1,5 +1,6 @@
 .git/
 .gradle/
+.idea/
 build/
 gradle/
 out/
