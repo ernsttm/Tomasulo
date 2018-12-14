@@ -121,7 +121,7 @@ public class ReorderBuffer implements CDBListener {
 
   public String printHistory() {
     StringBuilder builder = new StringBuilder();
-    builder.append("Instruction \tIssue\tExecute\tMemory\tWriteBack\tCommit\n");
+    builder.append("Instruction \t\tIssue\tExecute\tMemory\tWriteBack\tCommit\n");
     for (BufferEntry entry : instructionHistory_) {
       builder.append(entry.getInstruction().printHistory());
     }

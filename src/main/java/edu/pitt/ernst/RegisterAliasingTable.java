@@ -43,7 +43,7 @@ public class RegisterAliasingTable {
       }
 
       if (oldRat.isValidRegister(i, true)) {
-        TableEntry oldEntry = oldRat.getIntEntry(i);
+        TableEntry oldEntry = oldRat.getFpEntry(i);
         fpEntry.setValue(oldEntry.getFloat(), oldEntry.getHardwareId());
       } else if (oldRat.isReservedRegister(i, true)) {
         fpEntry.setHardwareId(oldRat.getHardwareRegister(i, true));
@@ -138,6 +138,15 @@ public class RegisterAliasingTable {
       if (null != entry.getValue().getHardwareId() && entry.getValue().getHardwareId() == register) {
         entry.getValue().reset();
         break;
+      }
+    }
+  }
+
+  public void rectify(RegisterAliasingTable oldRat) {
+    for (int i = 0; i < 32; i++) {
+      TableEntry entry = intRegMap_.get(i);
+      if (entry.isValid() && !oldRat.isValidRegister(i, false)) {
+        oldRat.setIntRegister(entry.getHardwareId(), entry.getInt());
       }
     }
   }

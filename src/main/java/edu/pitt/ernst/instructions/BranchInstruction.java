@@ -4,8 +4,8 @@ package edu.pitt.ernst.instructions;
  * An instruction for a branch operation.
  */
 public class BranchInstruction extends Instruction {
-  public BranchInstruction(InstructionTypes type, int op1, int op2, int offset, int address) {
-    super(address);
+  public BranchInstruction(InstructionTypes type, int op1, int op2, int offset, int address, String inst) {
+    super(address, inst);
     type_ = type;
 
     op1_ = op1;
