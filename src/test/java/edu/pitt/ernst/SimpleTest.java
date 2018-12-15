@@ -238,6 +238,40 @@ public class SimpleTest {
     assertEquals(4, regFile.getIntRegister(3).getValue());
   }
 
+  @Test
+  public void testSubmitCase() throws URISyntaxException {
+    ClassLoader loader = getClass().getClassLoader();
+    URL url = loader.getResource("java/edu/pitt/ernst/config/TestCaseConfig.json");
+    File configFile = new File(url.toURI());
+
+    ProcessorConfig config = ProcessorConfig.createInstance(configFile.getAbsolutePath());
+    config.setInstructionFile(getInstructionFilePath("TestCase.txt"));
+    Processor proc = new Processor(config);
+
+    while (!proc.executeCycle()) {
+      proc.outputState();
+    }
+
+    proc.outputState();
+  }
+
+  @Test
+  public void testMemCase() throws URISyntaxException {
+    ClassLoader loader = getClass().getClassLoader();
+    URL url = loader.getResource("java/edu/pitt/ernst/config/TestCaseConfig.json");
+    File configFile = new File(url.toURI());
+
+    ProcessorConfig config = ProcessorConfig.createInstance(configFile.getAbsolutePath());
+    config.setInstructionFile(getInstructionFilePath("DoubleMem.txt"));
+    Processor proc = new Processor(config);
+
+    while (!proc.executeCycle()) {
+      proc.outputState();
+    }
+
+    proc.outputState();
+  }
+
   private String getInstructionFilePath(String testInstructionFile)
       throws URISyntaxException {
     String resourcePath = INSTRUCTION_DIR + testInstructionFile;

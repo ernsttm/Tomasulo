@@ -27,7 +27,8 @@ public class InstructionBuffer {
    */
   public Instruction getNext() {
     int address = instructionPointer_++;
-    String[] codons =  instructions_.get(address).split(" ");
+    String inst = instructions_.get(address);
+    String[] codons =  inst.split(" ");
 
     Instruction instruction = null;
     InstructionTypes type = InstructionTypes.fromString(codons[0]);
@@ -38,7 +39,7 @@ public class InstructionBuffer {
         String[] regOffsetPair = codons[2].split(Pattern.quote("("));
         int offset = Integer.parseInt(regOffsetPair[0].trim());
         int register = Integer.parseInt(regOffsetPair[1].replace(")", " ").trim());
-        instruction = new MemoryInstruction(type, destination, register, offset, address);
+        instruction = new MemoryInstruction(type, destination, register, offset, address, inst);
         break;
       }
       case ADD_INT:
@@ -50,7 +51,7 @@ public class InstructionBuffer {
         int destination = Integer.parseInt(codons[1].replace(',', ' ').trim());
         int op1 = Integer.parseInt(codons[2].replace(',', ' ').trim());
         int op2 = Integer.parseInt(codons[3].trim());
-        instruction = new ALUInstruction(type, destination, op1, op2, address);
+        instruction = new ALUInstruction(type, destination, op1, op2, address, inst);
         break;
       }
       case BRANCH_EQUAL:
@@ -58,7 +59,7 @@ public class InstructionBuffer {
         int op1 = Integer.parseInt(codons[1].replace(',', ' ').trim());
         int op2 = Integer.parseInt(codons[2].replace(',', ' ').trim());
         int offset = Integer.parseInt(codons[3].trim());
-        instruction = new BranchInstruction(type, op1, op2, offset, address);
+        instruction = new BranchInstruction(type, op1, op2, offset, address, inst);
         break;
       }
     }

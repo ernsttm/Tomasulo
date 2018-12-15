@@ -9,16 +9,28 @@ import edu.pitt.ernst.rob.InstructionState;
 public abstract class ReservationStation {
   ReservationStation() {
     isBusy_ = false;
+    isReady_ = false;
   }
 
   boolean isBusy() {
     return isBusy_;
   }
 
-  abstract boolean isReady();
+  abstract boolean isReady();// {
+//    if (isReady_) {
+//      return true;
+//    } else if (isBusy_) {
+//      isReady_ = true;
+//      return false;
+//    } else {
+//      isReady_ = false;
+//      return false;
+//    }
+//  }
 
   void reset() {
     isBusy_ = false;
+    isReady_ = false;
   }
 
   public void reserve(Instruction instruction, RegisterAliasingTable rat) {
@@ -51,5 +63,6 @@ public abstract class ReservationStation {
   }
 
   private boolean isBusy_;
+  private boolean isReady_;
   protected Instruction instruction_;
 }

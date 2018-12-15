@@ -82,7 +82,9 @@ public class Processor {
       }
       // A misprediction has occurred, revert state and charge an extra cycle.
       rollbackStations();
-      rat_ = rats_.get(mispredictedInstruction_.getId());
+      RegisterAliasingTable oldRat = rats_.get(mispredictedInstruction_.getId());
+      rat_.rectify(oldRat);
+      rat_ = oldRat;
       rob_.branchRollback(mispredictedInstruction_.getId());
       cycle_++;
       mispredictedInstruction_ = null;

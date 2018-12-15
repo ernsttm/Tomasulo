@@ -4,8 +4,8 @@ package edu.pitt.ernst.instructions;
  * An instruction for a memory access/store
  */
 public class MemoryInstruction extends Instruction implements DestinationInstruction {
-  public MemoryInstruction(InstructionTypes type, int destination, int register, int offset, int address) {
-    super(address);
+  public MemoryInstruction(InstructionTypes type, int destination, int register, int offset, int address, String inst) {
+    super(address, inst);
 
     type_ = type;
 

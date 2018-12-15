@@ -4,8 +4,8 @@ package edu.pitt.ernst.instructions;
  * An instruction for an arithmetic operation.
  */
 public class ALUInstruction extends Instruction implements DestinationInstruction {
-  public ALUInstruction(InstructionTypes type, int destination, int op1, int op2, int address) {
-    super(address);
+  public ALUInstruction(InstructionTypes type, int destination, int op1, int op2, int address, String inst) {
+    super(address, inst);
 
     type_ = type;
     op1_ = op1;
