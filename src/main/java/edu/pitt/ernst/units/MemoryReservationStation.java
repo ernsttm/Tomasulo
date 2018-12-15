@@ -71,6 +71,10 @@ public class MemoryReservationStation extends ReservationStation {
 
   @Override
   public boolean isReady() {
+    if (!super.isReady()) {
+      return false;
+    }
+
     return null != registerValue_;
   }
 

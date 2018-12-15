@@ -22,7 +22,6 @@ public class FloatingPointMLU extends FunctionalUnit {
   protected boolean tryPublish(ReservationStation station) {
     FloatingPointALURS fpRS = (FloatingPointALURS)station;
     double value = operationValues_.get(station.getInstructionId());
-    operationValues_.remove(station.getInstructionId());
     return CDB.getInstance().tryPublish(fpRS.getInstructionId(), fpRS.getDestination(), value);
   }
 

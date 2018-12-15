@@ -16,17 +16,17 @@ public abstract class ReservationStation {
     return isBusy_;
   }
 
-  abstract boolean isReady();// {
-//    if (isReady_) {
-//      return true;
-//    } else if (isBusy_) {
-//      isReady_ = true;
-//      return false;
-//    } else {
-//      isReady_ = false;
-//      return false;
-//    }
-//  }
+  boolean isReady() {
+    if (isReady_) {
+      return true;
+    } else if (isBusy_) {
+      isReady_ = true;
+      return false;
+    } else {
+      isReady_ = false;
+      return false;
+    }
+  }
 
   void reset() {
     isBusy_ = false;

@@ -248,7 +248,7 @@ public class SimpleTest {
     config.setInstructionFile(getInstructionFilePath("TestCase.txt"));
     Processor proc = new Processor(config);
 
-    while (!proc.executeCycle()) {
+    while (proc.executeCycle()) {
       proc.outputState();
     }
 

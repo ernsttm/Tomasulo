@@ -41,6 +41,10 @@ public class FloatingPointALURS extends ReservationStation {
 
   @Override
   public boolean isReady() {
+    if (!super.isReady()) {
+      return false;
+    }
+
     for (int i = 0; i < 2; i++) {
       if (null == values_[i]) {
         return false;

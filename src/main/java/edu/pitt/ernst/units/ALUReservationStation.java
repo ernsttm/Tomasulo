@@ -16,6 +16,8 @@ public class ALUReservationStation extends ReservationStation {
     values_ = new Integer[2];
     values_[0] = null;
     values_[1] = null;
+
+    destination_ = -1;
   }
 
   @Override
@@ -67,6 +69,10 @@ public class ALUReservationStation extends ReservationStation {
 
   @Override
   public boolean isReady() {
+    if (!super.isReady()) {
+      return false;
+    }
+
     for (int i = 0; i < 2; i++) {
       if (null == values_[i]) {
         return false;

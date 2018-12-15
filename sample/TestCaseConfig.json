@@ -1,0 +1,35 @@
+{
+  "rob_entries": 64,
+  "cdb_entries": 1,
+  "hardware_fp_registers": 60,
+  "hardware_int_registers": 60,
+  "instruction_file":"test_case.txt",
+  "memory": {
+    "start_values": [
+      { "address": 4, "value": "3.0" },
+      { "address": 8, "value": "2.0" },
+      { "address": 12, "value": "1.0" },
+      { "address": 24, "value": "6.0" },
+      { "address": 28, "value": "5.0" },
+      { "address": 32, "value": "4.0" }
+    ]
+  },
+  "registers": {
+    "start_values": [
+      { "name": "int_1", "value": "12" },
+      { "name": "int_2", "value": "32" },
+      { "name": "fp_20", "value": "2.0"}
+    ]
+  },
+  "reservation_stations" : {
+    "adder_stations": 4,
+    "fp_adder_stations": 3,
+    "fp_multiplier_stations": 2,
+    "memory_stations": 3,
+    "adder_cycles": 1,
+    "fp_adder_cycles": 4,
+    "fp_multiplier_cycles": 15,
+    "memory_exec_cycles": 1,
+    "memory_access_cycles": 5
+  }
+}
